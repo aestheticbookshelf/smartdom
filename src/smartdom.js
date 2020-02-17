@@ -1,3 +1,6 @@
+/**
+ * SmartDomElement_ base class
+ */
 class SmartDomElement_{
     constructor(propsOpt){
         let props = propsOpt || {}

@@ -11,6 +11,6 @@
 	fetch = +refs/heads/*:refs/remotes/github/*
 [user]
 	name = aestheticbookshelf
-	email = aestheticbookshelfgmail.com
+	email = aestheticbookshelf@gmail.com
 	[credential "https://github.com/aestheticbookshelf/smartdom.git"]
 		username = aestheticbookshelf
