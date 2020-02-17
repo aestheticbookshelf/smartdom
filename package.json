@@ -1,6 +1,6 @@
 {
   "name": "@aestheticbookshelf/smartdom",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Dom wrapper.",
   "main": "src/smartdom.js",
   "scripts": {
@@ -21,6 +21,5 @@
     "type": "git",
     "url": "https://github.com/aestheticbookshelf/smartdom.git"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
