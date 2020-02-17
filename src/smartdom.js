@@ -1,7 +1,15 @@
 /**
- * SmartDomElement_ base class
+ * SmartDomElement_ base class foo
+ * @param propsOpt {object} props [optional]
  */
 class SmartDomElement_{
+    /**
+     * propsOpt when defined is a dictionary with optional members:
+     * <table class="classtable">
+     * <tr><td>tag</td><td>HTML tag name [ default : "div" ]</td>
+     * <tr><td>id</td><td>element id</td>
+     * </table>
+     */
     constructor(propsOpt){
         let props = propsOpt || {}
 
@@ -47,6 +55,9 @@ class SmartDomElement_{
     html(x)     {this.e.innerHTML = x;return this}
 }
 
+/**
+ * Div
+ */
 class div_ extends SmartDomElement_{
     constructor(props){
         super(props)
