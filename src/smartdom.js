@@ -64,7 +64,7 @@ class div_ extends SmartDomElement_{
     }
 }
 /**
- * returns a div_
+ * returns a new div_ instance
  * @param props {object} props <opt-param />
  * @example
  * // creates a div with content "I'm a div."
