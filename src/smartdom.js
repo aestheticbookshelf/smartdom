@@ -308,7 +308,7 @@ class input_ extends SmartDomElement_{
 function input(props){return input_(props)}
 
 /**
- * wrapper class for HTML input element, props is a dictionary with optional members:
+ * wrapper class for HTML checkbox input element, props is a dictionary with optional members:
  * <table class="classtable">     
  * <tr><td>forceChecked</td><td>boolean, force checked status to true or false</td>     
  * <tr><td>changeCallback</td><td>change callback</td>     
@@ -333,10 +333,16 @@ class CheckBoxInput_ extends input_{
         if(this.props.changeCallback) this.props.changeCallback(this.state.checked)
     }
 
+    /**
+     * init state
+     */
     initState(){
         if(typeof this.props.forceChecked != "undefined") this.state.checked = this.props.forceChecked
     }
 
+    /**
+     * build
+     */
     build(){
         this.e.checked = this.state.checked
     }
