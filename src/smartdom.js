@@ -63,6 +63,13 @@ class div_ extends SmartDomElement_{
         super(props)
     }
 }
+/**
+ * returns a div_
+ * @param props {object} props <opt-param />
+ * @example
+ * // creates a div with content "I'm a div."
+ * div().html("I'm a div.")
+ */
 function div(props){return new div_(props)}
 
 module.exports = {
