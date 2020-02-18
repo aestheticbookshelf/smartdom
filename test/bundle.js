@@ -108,6 +108,50 @@ class SmartDomElement_{
     }
 
     /**
+     * set HTML element attribute
+     * @param name {string} name 
+     * @param value {any} value 
+     */
+    setAttribute(name, value){
+        this.e.setAttribute(name, value)
+        return this
+    }
+
+    /**
+     * get HTML element attribute
+     * @param name {string} name 
+     */
+    getAttribute(name){
+        return this.e.getAttribute(name)
+    }
+
+    /**
+     * return element value
+     */
+    value(){
+        return this.e.value
+    }
+
+    /**
+     * set element value
+     * @param value {any} value 
+     */
+    setValue(value){
+        this.e.value = value
+    }
+
+    /**
+     * add event listeners with a callback
+     * @param events {string} events separated by space
+     * @param callback {function} callback
+     */
+    ae(events, callback){
+        for(let event of events.split(" ")){
+            this.e.addEventListener(event, callback)
+        }
+    }
+
+    /**
      * set width
      * @param x {number} width in pixels
      */
@@ -155,6 +199,7 @@ class SmartDomElement_{
             if(current.pathId()) pathList.unshift(current.pathId())
             current = current.parent
         }
+        return pathList
     }
 
     /**
@@ -227,7 +272,7 @@ class SmartDomElement_{
 }
 
 /**
- * Div
+ * wrapper class for HTML div element
  */
 class div_ extends SmartDomElement_{
     constructor(props){
@@ -243,16 +288,80 @@ class div_ extends SmartDomElement_{
  */
 function div(props){return new div_(props)}
 
+/**
+ * wrapper class for HTML input element, props is a dictionary with optional members:
+ * <table class="classtable">     
+ * <tr><td>type</td><td>input type [ default: "text" ]</td>     
+ * </table>
+ */
+class input_ extends SmartDomElement_{
+    constructor(props){
+        super({...props, ...{
+            tag: "input"
+        }})
+        this.setAttribute("type", props.type || "text")
+    }
+}
+/**
+ * returns a new input_instance
+ * @param props {object} props <opt-param /> 
+ */
+function input(props){return input_(props)}
+
+/**
+ * wrapper class for HTML input element, props is a dictionary with optional members:
+ * <table class="classtable">     
+ * <tr><td>forceChecked</td><td>boolean, force checked status to true or false</td>     
+ * <tr><td>changeCallback</td><td>change callback</td>     
+ * </table>
+ */
+class CheckBoxInput_ extends input_{
+    constructor(props){
+        super({...props, ...{
+            type: "checkbox"
+        }})
+
+        this.ae("change", this.changed.bind(this))
+    }
+
+    /**
+     * handle change event
+     */
+    changed(){
+        this.state.checked = this.e.checked
+        this.storeState()
+
+        if(this.props.changeCallback) this.props.changeCallback(this.state.checked)
+    }
+
+    initState(){
+        if(typeof this.props.forceChecked != "undefined") this.state.checked = this.props.forceChecked
+    }
+
+    build(){
+        this.e.checked = this.state.checked
+    }
+}
+/**
+ * returns a new CheckBoxInput_ instance
+ * @param props {object} props <opt-param />, see class constructor
+ */
+function CheckBoxInput(props){return new CheckBoxInput_(props)}
+
 module.exports = {
-    div: div
+    div: div,
+    CheckBoxInput: CheckBoxInput,
 }
 
 },{}],2:[function(require,module,exports){
-const { div } = require('../src/smartdom')
+const { div, CheckBoxInput } = require('../src/smartdom')
 
 let app = div().w(100).h(100).pad(10).bc("#0f0").a(
-    div().bc("#00f").c("#fff").pad(10).html("test")
+    div().bc("#00f").c("#fff").pad(10).html("test"),
+    CheckBoxInput({id: "check"})
 )
+
+app.mountChilds()
 
 document.querySelector("#root").appendChild(app.e)
 
