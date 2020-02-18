@@ -9,8 +9,13 @@
 [remote "github"]
 	url = https://github.com/aestheticbookshelf/smartdom.git
 	fetch = +refs/heads/*:refs/remotes/github/*
+[remote "gitlab"]
+	url = https://gitlab.com/aestheticbookshelf/smartdom.git
+	fetch = +refs/heads/*:refs/remotes/github/*
 [user]
 	name = aestheticbookshelf
 	email = aestheticbookshelf@gmail.com
 	[credential "https://github.com/aestheticbookshelf/smartdom.git"]
+		username = aestheticbookshelf
+	[credential "https://gitlab.com/aestheticbookshelf/smartdom.git"]
 		username = aestheticbookshelf
