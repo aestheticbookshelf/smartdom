@@ -310,14 +310,18 @@ class input_ extends SmartDomElement_{
 function input(props){return input_(props)}
 
 /**
- * wrapper class for HTML table element, props is a dictionary with optional members:
- * <table class="classtable">     
- * <tr><td>cellpadding</td><td>cell padding</td>     
- * <tr><td>cellspacing</td><td>cell spacing</td>     
- * <tr><td>border</td><td>border width</td>     
- * </table>
+ * wrapper class for HTML table element, props is a dictionary with optional members: 
+ * @param props {object} props <opt-param />
  */
 class table_ extends SmartDomElement_{
+    /**
+     * props when defined is a dictionary with optional members:     
+     * <table class="classtable">     
+     * <tr><td>cellpadding</td><td>cell padding</td>     
+     * <tr><td>cellspacing</td><td>cell spacing</td>     
+     * <tr><td>border</td><td>border width</td>     
+     * </table>
+     */
     constructor(props){
         super({...props, ...{
             tag: "table"

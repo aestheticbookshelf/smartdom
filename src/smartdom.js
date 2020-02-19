@@ -37,25 +37,17 @@ function storeLocal(path, value){
  */
 
 /**
- * SmartDomElement_ base class foo
- * @param propsOpt {object} props [optional]
+ * base class of smartdom wrapper
+ * <props-opt></props-opt>
+ * @param props {object} props <opt-param />
  */
 class SmartDomElement_{
-    /**
-     * propsOpt when defined is a dictionary with optional members:
-     * <table class="classtable">
-     * <tr><td>tag</td><td>HTML tag name [ default : "div" ]</td>
-     * <tr><td>id</td><td>element id</td>
-     * <tr><td>forceStorePath</td><td>force store path</td>     
-     * </table>
-     */
-    constructor(propsOpt){
-        let props = propsOpt || {}
-        this.props = props
+    constructor(props){        
+        this.props = props || {}
 
-        let tag = props.tag || "div"
+        let tag = this.props.tag || "div"
 
-        this.id = props.id
+        this.id = this.props.id
 
         this.childs = []
 
@@ -289,12 +281,16 @@ class div_ extends SmartDomElement_{
 function div(props){return new div_(props)}
 
 /**
- * wrapper class for HTML input element, props is a dictionary with optional members:
- * <table class="classtable">     
- * <tr><td>type</td><td>input type [ default: "text" ]</td>     
- * </table>
+ * wrapper for HTML input element
+ * @param props (object) props <opt-param /> 
  */
 class input_ extends SmartDomElement_{
+    /**
+     * <props-opt></props-opt>     
+     * <table class="classtable">     
+     * <tr><td>type</td><td>input type [ default: "text" ]</td>     
+     * </table>
+     */
     constructor(props){
         super({...props, ...{
             tag: "input"
@@ -309,14 +305,18 @@ class input_ extends SmartDomElement_{
 function input(props){return input_(props)}
 
 /**
- * wrapper class for HTML table element, props is a dictionary with optional members:
- * <table class="classtable">     
- * <tr><td>cellpadding</td><td>cell padding</td>     
- * <tr><td>cellspacing</td><td>cell spacing</td>     
- * <tr><td>border</td><td>border width</td>     
- * </table>
+ * wrapper class for HTML table element
+ * @param props {object} props <opt-param />
  */
 class table_ extends SmartDomElement_{
+    /**
+     * <props-opt></props-opt>
+     * <table class="classtable">     
+     * <tr><td>cellpadding</td><td>cell padding</td>     
+     * <tr><td>cellspacing</td><td>cell spacing</td>     
+     * <tr><td>border</td><td>border width</td>     
+     * </table>
+     */
     constructor(props){
         super({...props, ...{
             tag: "table"
@@ -397,13 +397,17 @@ class td_ extends SmartDomElement_{
 function td(props){return new td_(props)}
 
 /**
- * wrapper class for HTML checkbox input element, props is a dictionary with optional members:
- * <table class="classtable">     
- * <tr><td>forceChecked</td><td>boolean, force checked status to true or false</td>     
- * <tr><td>changeCallback</td><td>change callback</td>     
- * </table>
+ * wrapper class for HTML checkbox input element
+ * @param props {object} props <opt-param />, see class constructor 
  */
 class CheckBoxInput_ extends input_{
+    /**
+     * <props-opt></props-opt>
+     * <table class="classtable">     
+     * <tr><td>forceChecked</td><td>boolean, force checked status to true or false</td>     
+     * <tr><td>changeCallback</td><td>change callback</td>     
+     * </table>
+     */
     constructor(props){
         super({...props, ...{
             type: "checkbox"
