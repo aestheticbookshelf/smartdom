@@ -1,17 +1,14 @@
-const { OptionsTable, table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
+const { Combo, select, option, OptionsTable, table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
 
 console.log("starting app")
 
-let app = OptionsTable({options: [
-    CheckBoxInput({
-        id: "local",
-        display: "Local"
-    }),
-    CheckBoxInput({
-        id: "usebook",
-        display: "Use book"
-    })
-]})
+let app = Combo({
+    id: "combo",
+    forceOptions: [
+        {value: "local", display: "Local"},
+        {value: "usebook", display: "Use Book"}
+    ]
+})
 
 app.mount()
 

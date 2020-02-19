@@ -33,6 +33,26 @@ function storeLocal(path, value){
 }
 
 /**
+ * translate option initializer
+ * @param obj {*} dicionary / array / string
+ */
+function translateOption(obj){
+    if(obj instanceof Array){
+        return ({
+            value: obj[0],
+            display: obj[1]
+        })
+    }    
+    if(typeof obj == "string"){
+        return ({
+            value: obj,
+            display: obj
+        })
+    }
+    return obj
+}
+
+/**
  * Classes
  */
 
@@ -385,20 +405,47 @@ class tr_ extends SmartDomElement_{
 function tr(props){return new tr_(props)}
 
 /**
- * wrapper class for HTML table cell element
+ * wrapper class for HTML select element
  */
-class td_ extends SmartDomElement_{
+class select_ extends SmartDomElement_{
     constructor(props){
         super({...props, ...{
-            tag: "td"
+            tag: "select"
         }})
     }
 }
 /**
- * returns a new td_ instance
+ * returns a new select_ instance
  * @param props {object} props <opt-param /> 
  */
-function td(props){return new td_(props)}
+function select(props){return new select_(props)}
+
+/**
+ * wrapper class for HTML option element
+ * @param props {object} props <opt-param />, see class constructor 
+ */
+class option_ extends SmartDomElement_{
+    /**
+     * <props-opt></props-opt>
+     * <table class="classtable">     
+     * <tr><td>value</td><td>option value</td>     
+     * <tr><td>display</td><td>option display</td>     
+     * </table>
+     */
+    constructor(props){
+        super({...props, ...{
+            tag: "option"
+        }})
+
+        if(this.props.value) this.setAttribute("value", this.props.value)
+        if(this.props.display) this.html(this.props.display)
+    }
+}
+/**
+ * returns a new option_ instance
+ * @param props {object} props <opt-param />, see class constructor
+ */
+function option(props){return new option_(props)}
 
 /**
  * wrapper class for HTML checkbox input element
@@ -433,8 +480,7 @@ class CheckBoxInput_ extends input_{
     /**
      * init state
      */
-    initState(){
-        console.log(this.storePath())
+    initState(){        
         if(typeof this.props.forceChecked != "undefined") this.state.checked = this.props.forceChecked
     }
 
@@ -452,6 +498,93 @@ class CheckBoxInput_ extends input_{
 function CheckBoxInput(props){return new CheckBoxInput_(props)}
 
 /**
+ * wrapper class for HTML table cell element
+ */
+class td_ extends SmartDomElement_{
+    constructor(props){
+        super({...props, ...{
+            tag: "td"
+        }})
+    }
+}
+/**
+ * returns a new td_ instance
+ * @param props {object} props <opt-param /> 
+ */
+function td(props){return new td_(props)}
+
+/**
+ * combo
+ * @param props {object} props <opt-param />, see class constructor 
+ */
+class Combo_ extends select_{
+    /**
+     * <props-opt></props-opt>
+     * <table class="classtable">     
+     * <tr><td>forceOptions</td><td>list of options, allowrd option formats {value: "foo", display: "bar"} / ["foor", "bar"] / "foo" ( display will also be "foo")</td>     
+     * <tr><td>forceSelected</td><td>selected option value</td>     
+     * <tr><td>changeCallback</td><td>change callback</td>     
+     * </table>
+     */
+    constructor(props){
+        super({...props, ...{            
+        }})
+
+        this.ae("change", this.changed.bind(this))
+    }
+
+    /**
+     * handle change event
+     */
+    changed(){
+        this.state.selected = this.value()
+
+        this.storeState()
+
+        if(this.props.changeCallback) this.props.changeCallback(this.state.selected)
+    }
+
+    /**
+     * init state
+     */
+    initState(){
+        if(!this.state.options) this.state.options = []
+        if(this.props.forceOptions) this.state.options = this.props.forceOptions
+        if(this.props.forceSelected) this.state.selected = this.props.forceSelected
+        this.translateOptions()
+        this.storeState()
+    }
+
+    /**
+     * translate options
+     */
+    translateOptions(){
+        this.state.options = this.state.options.map(opt => translateOption(opt))
+    }
+
+    /**
+     * build
+     */
+    build(){
+        this.translateOptions()
+        this.x().a(
+            this.state.options.map(
+                opt => {
+                    let o = option(opt)
+                    if(opt.value == this.state.selected) o.setAttribute("selected", true)
+                    return o
+                }
+            )
+        )
+    }
+}
+/**
+ * returns a new Combo_ instance
+ * @param props {object} props <opt-param />, see class constructor
+ */
+function Combo(props){return new Combo_(props)}
+
+/**
  * options table
  * @param props {object} see class constructor 
  */
@@ -466,15 +599,13 @@ class OptionsTable_ extends table_{
     constructor(props){
         super({...props, ...{
             
-        }})
-        console.log("options created")
+        }})        
     }
 
     /**
      * build
      */
-    build(){
-        console.log("options build")
+    build(){        
         this.a(
             thead().a(
                 tr().a(
@@ -506,5 +637,8 @@ module.exports = {
     tbody: tbody,
     tr: tr,
     td: td,
-    OptionsTable: OptionsTable
+    OptionsTable: OptionsTable,
+    select: select,
+    option: option,
+    Combo: Combo
 }
