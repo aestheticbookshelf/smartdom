@@ -47,7 +47,7 @@ class SmartDomElement_{
      * <table class="classtable">
      * <tr><td>tag</td><td>HTML tag name [ default : "div" ]</td>
      * <tr><td>id</td><td>element id</td>
-     * <tr><td>forceStorePath</td><td>force store path</td>
+     * <tr><td>forceStorePath</td><td>force store path</td>     
      * </table>
      */
     constructor(propsOpt){
@@ -255,10 +255,11 @@ class SmartDomElement_{
     /**
      * mount element
      */
-    mount(){
+    mount(){        
         this.retrieveState()
         this.initState()
         this.build()
+        this.mountChilds()
     }
 
     /**
@@ -303,13 +304,101 @@ class input_ extends SmartDomElement_{
     }
 }
 /**
- * returns a new input_instance
+ * returns a new input_ instance
  * @param props {object} props <opt-param /> 
  */
 function input(props){return input_(props)}
 
 /**
- * wrapper class for HTML input element, props is a dictionary with optional members:
+ * wrapper class for HTML table element, props is a dictionary with optional members:
+ * <table class="classtable">     
+ * <tr><td>cellpadding</td><td>cell padding</td>     
+ * <tr><td>cellspacing</td><td>cell spacing</td>     
+ * <tr><td>border</td><td>border width</td>     
+ * </table>
+ */
+class table_ extends SmartDomElement_{
+    constructor(props){
+        super({...props, ...{
+            tag: "table"
+        }})
+        if(typeof this.props.cellpadding != "undefined") this.setAttribute("cellpadding", this.props.cellpadding)
+        if(typeof this.props.cellspacing != "undefined") this.setAttribute("cellspacing", this.props.cellspacing)
+        if(typeof this.props.border != "undefined") this.setAttribute("border", this.props.border)
+    }
+}
+/**
+ * returns a new table_ instance
+ * @param props {object} props <opt-param /> 
+ */
+function table(props){return new table_(props)}
+
+/**
+ * wrapper class for HTML table head element
+ */
+class thead_ extends SmartDomElement_{
+    constructor(props){
+        super({...props, ...{
+            tag: "thead"
+        }})
+    }
+}
+/**
+ * returns a new thead_ instance
+ * @param props {object} props <opt-param /> 
+ */
+function thead(props){return new thead_(props)}
+
+/**
+ * wrapper class for HTML table body element
+ */
+class tbody_ extends SmartDomElement_{
+    constructor(props){
+        super({...props, ...{
+            tag: "tbody"
+        }})
+    }
+}
+/**
+ * returns a new tbody_ instance
+ * @param props {object} props <opt-param /> 
+ */
+function tbody(props){return new tbody_(props)}
+
+/**
+ * wrapper class for HTML table row element
+ */
+class tr_ extends SmartDomElement_{
+    constructor(props){
+        super({...props, ...{
+            tag: "tr"
+        }})
+    }
+}
+/**
+ * returns a new tr_ instance
+ * @param props {object} props <opt-param /> 
+ */
+function tr(props){return new tr_(props)}
+
+/**
+ * wrapper class for HTML table cell element
+ */
+class td_ extends SmartDomElement_{
+    constructor(props){
+        super({...props, ...{
+            tag: "td"
+        }})
+    }
+}
+/**
+ * returns a new td_ instance
+ * @param props {object} props <opt-param /> 
+ */
+function td(props){return new td_(props)}
+
+/**
+ * wrapper class for HTML checkbox input element, props is a dictionary with optional members:
  * <table class="classtable">     
  * <tr><td>forceChecked</td><td>boolean, force checked status to true or false</td>     
  * <tr><td>changeCallback</td><td>change callback</td>     
@@ -334,10 +423,17 @@ class CheckBoxInput_ extends input_{
         if(this.props.changeCallback) this.props.changeCallback(this.state.checked)
     }
 
+    /**
+     * init state
+     */
     initState(){
+        console.log(this.storePath())
         if(typeof this.props.forceChecked != "undefined") this.state.checked = this.props.forceChecked
     }
 
+    /**
+     * build
+     */
     build(){
         this.e.checked = this.state.checked
     }
@@ -350,15 +446,31 @@ function CheckBoxInput(props){return new CheckBoxInput_(props)}
 
 module.exports = {
     div: div,
+    input: input,
     CheckBoxInput: CheckBoxInput,
+    table: table,
+    thead: thead,
+    tbody: tbody,
+    tr: tr,
+    td: td
 }
 
 },{}],2:[function(require,module,exports){
-const { div, CheckBoxInput } = require('../src/smartdom')
+const { table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
 
-let app = div().w(100).h(100).pad(10).bc("#0f0").a(
-    div().bc("#00f").c("#fff").pad(10).html("test"),
-    CheckBoxInput({id: "check"})
+let app = table({cellpadding: 3, cellspacing: 3, border: 1}).a(
+    thead().a(
+        tr().a(
+            td().html("Option Name"),
+            td().html("Option Value"),
+        )
+    ),
+    tbody().a(
+        tr().a(
+            td().html("Local"),
+            td().a(CheckBoxInput({id: "local"})),
+        )
+    )
 )
 
 app.mountChilds()

@@ -1,8 +1,18 @@
-const { div, CheckBoxInput } = require('../src/smartdom')
+const { table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
 
-let app = div().w(100).h(100).pad(10).bc("#0f0").a(
-    div().bc("#00f").c("#fff").pad(10).html("test"),
-    CheckBoxInput({id: "check"})
+let app = table({cellpadding: 3, cellspacing: 3, border: 1}).a(
+    thead().a(
+        tr().a(
+            td().html("Option Name"),
+            td().html("Option Value"),
+        )
+    ),
+    tbody().a(
+        tr().a(
+            td().html("Local"),
+            td().a(CheckBoxInput({id: "local"})),
+        )
+    )
 )
 
 app.mountChilds()

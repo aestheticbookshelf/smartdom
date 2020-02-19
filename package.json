@@ -1,6 +1,6 @@
 {
   "name": "@aestheticbookshelf/smartdom",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Dom wrapper.",
   "main": "src/smartdom.js",
   "scripts": {
