@@ -38,25 +38,17 @@ function storeLocal(path, value){
  */
 
 /**
- * SmartDomElement_ base class foo
- * @param propsOpt {object} props [optional]
+ * base class of smartdom wrapper
+ * <props-opt></props-opt>
+ * @param props {object} props <opt-param />
  */
 class SmartDomElement_{
-    /**
-     * propsOpt when defined is a dictionary with optional members:
-     * <table class="classtable">
-     * <tr><td>tag</td><td>HTML tag name [ default : "div" ]</td>
-     * <tr><td>id</td><td>element id</td>
-     * <tr><td>forceStorePath</td><td>force store path</td>     
-     * </table>
-     */
-    constructor(propsOpt){
-        let props = propsOpt || {}
-        this.props = props
+    constructor(props){        
+        this.props = props || {}
 
-        let tag = props.tag || "div"
+        let tag = this.props.tag || "div"
 
-        this.id = props.id
+        this.id = this.props.id
 
         this.childs = []
 
@@ -151,6 +143,10 @@ class SmartDomElement_{
         }
     }
 
+    /**
+     * delete content of element
+     */
+    x()        {this.innerHTML="";return this}
     /**
      * set width
      * @param x {number} width in pixels
@@ -290,12 +286,16 @@ class div_ extends SmartDomElement_{
 function div(props){return new div_(props)}
 
 /**
- * wrapper class for HTML input element, props is a dictionary with optional members:
- * <table class="classtable">     
- * <tr><td>type</td><td>input type [ default: "text" ]</td>     
- * </table>
+ * wrapper for HTML input element
+ * @param props (object) props <opt-param /> 
  */
 class input_ extends SmartDomElement_{
+    /**
+     * <props-opt></props-opt>     
+     * <table class="classtable">     
+     * <tr><td>type</td><td>input type [ default: "text" ]</td>     
+     * </table>
+     */
     constructor(props){
         super({...props, ...{
             tag: "input"
@@ -310,12 +310,12 @@ class input_ extends SmartDomElement_{
 function input(props){return input_(props)}
 
 /**
- * wrapper class for HTML table element, props is a dictionary with optional members: 
+ * wrapper class for HTML table element
  * @param props {object} props <opt-param />
  */
 class table_ extends SmartDomElement_{
     /**
-     * props when defined is a dictionary with optional members:     
+     * <props-opt></props-opt>
      * <table class="classtable">     
      * <tr><td>cellpadding</td><td>cell padding</td>     
      * <tr><td>cellspacing</td><td>cell spacing</td>     
@@ -402,13 +402,17 @@ class td_ extends SmartDomElement_{
 function td(props){return new td_(props)}
 
 /**
- * wrapper class for HTML checkbox input element, props is a dictionary with optional members:
- * <table class="classtable">     
- * <tr><td>forceChecked</td><td>boolean, force checked status to true or false</td>     
- * <tr><td>changeCallback</td><td>change callback</td>     
- * </table>
+ * wrapper class for HTML checkbox input element
+ * @param props {object} props <opt-param />, see class constructor 
  */
 class CheckBoxInput_ extends input_{
+    /**
+     * <props-opt></props-opt>
+     * <table class="classtable">     
+     * <tr><td>forceChecked</td><td>boolean, force checked status to true or false</td>     
+     * <tr><td>changeCallback</td><td>change callback</td>     
+     * </table>
+     */
     constructor(props){
         super({...props, ...{
             type: "checkbox"
@@ -448,6 +452,52 @@ class CheckBoxInput_ extends input_{
  */
 function CheckBoxInput(props){return new CheckBoxInput_(props)}
 
+/**
+ * options table
+ * @param props {object} see class constructor 
+ */
+class OptionsTable_ extends table_{
+    /**     
+     * props should have an options field
+     * <table class="classtable">     
+     * <tr><td>options</td><td>array of input elements,
+     * each input element should have a display field in its props, telling the name of the option</td>          
+     * </table>
+     */
+    constructor(props){
+        super({...props, ...{
+            
+        }})
+        console.log("options created")
+    }
+
+    /**
+     * build
+     */
+    build(){
+        console.log("options build")
+        this.a(
+            thead().a(
+                tr().a(
+                    td().html("Option Name"),
+                    td().html("Option Value"),
+                )
+            ),
+            tbody().a(
+                this.props.options.map(option => tr().a(
+                    td().html(option.props.display),
+                    td().a(option),
+                ))                
+            )
+        )
+    }
+}
+/**
+ * returns a new OptionsTable_ instance
+ * @param props {object} props, see class constructor
+ */
+function OptionsTable(props){return new OptionsTable_(props)}
+
 module.exports = {
     div: div,
     input: input,
@@ -456,29 +506,30 @@ module.exports = {
     thead: thead,
     tbody: tbody,
     tr: tr,
-    td: td
+    td: td,
+    OptionsTable: OptionsTable
 }
 
 },{}],2:[function(require,module,exports){
-const { table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
+const { OptionsTable, table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
 
-let app = table({cellpadding: 3, cellspacing: 3, border: 1}).a(
-    thead().a(
-        tr().a(
-            td().html("Option Name"),
-            td().html("Option Value"),
-        )
-    ),
-    tbody().a(
-        tr().a(
-            td().html("Local"),
-            td().a(CheckBoxInput({id: "local"})),
-        )
-    )
-)
+console.log("starting app")
 
-app.mountChilds()
+let app = OptionsTable({options: [
+    CheckBoxInput({
+        id: "local",
+        display: "Local"
+    }),
+    CheckBoxInput({
+        id: "usebook",
+        display: "Use book"
+    })
+]})
+
+app.mount()
 
 document.querySelector("#root").appendChild(app.e)
+
+console.log("app started")
 
 },{"../src/smartdom":1}]},{},[2]);

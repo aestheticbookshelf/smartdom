@@ -143,6 +143,10 @@ class SmartDomElement_{
     }
 
     /**
+     * delete content of element
+     */
+    x()        {this.innerHTML="";return this}
+    /**
      * set width
      * @param x {number} width in pixels
      */
@@ -447,6 +451,52 @@ class CheckBoxInput_ extends input_{
  */
 function CheckBoxInput(props){return new CheckBoxInput_(props)}
 
+/**
+ * options table
+ * @param props {object} see class constructor 
+ */
+class OptionsTable_ extends table_{
+    /**     
+     * props should have an options field
+     * <table class="classtable">     
+     * <tr><td>options</td><td>array of input elements,
+     * each input element should have a display field in its props, telling the name of the option</td>          
+     * </table>
+     */
+    constructor(props){
+        super({...props, ...{
+            
+        }})
+        console.log("options created")
+    }
+
+    /**
+     * build
+     */
+    build(){
+        console.log("options build")
+        this.a(
+            thead().a(
+                tr().a(
+                    td().html("Option Name"),
+                    td().html("Option Value"),
+                )
+            ),
+            tbody().a(
+                this.props.options.map(option => tr().a(
+                    td().html(option.props.display),
+                    td().a(option),
+                ))                
+            )
+        )
+    }
+}
+/**
+ * returns a new OptionsTable_ instance
+ * @param props {object} props, see class constructor
+ */
+function OptionsTable(props){return new OptionsTable_(props)}
+
 module.exports = {
     div: div,
     input: input,
@@ -455,5 +505,6 @@ module.exports = {
     thead: thead,
     tbody: tbody,
     tr: tr,
-    td: td
+    td: td,
+    OptionsTable: OptionsTable
 }
