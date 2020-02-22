@@ -2,6 +2,40 @@
  * Global functions
  */
 
+let alertElement = null
+let alertTimeout = null
+
+/**
+ * alert<br> 
+ * <props-opt></props-opt>     
+ * <table class="classtable">     
+ * <tr><td>msg</td><td>message [ default: "Alert!"]</td>     
+ * <tr><td>delay</td><td>delay ms</td>     
+ * <tr><td>kind</td><td>kind [ info / success / error ]</td>     
+ * </table>
+ * @param props {object} props <opt-param />
+ */
+function alert(propsOpt){
+    let props = propsOpt || {}
+
+    if(!alertElement) alertElement = div().poa().ac("alertelement")
+
+    let de = document.documentElement
+
+    de.style.position = "relative"
+
+    de.appendChild(alertElement.e)
+
+    alertElement.html(props.msg || "Alert!").dispi().rc("info success error")
+
+    if(props.kind) alertElement.ac(props.kind)
+
+    if(alertTimeout) clearTimeout(alertTimeout)
+    alertTimeout = setTimeout(_ => {        
+        alertElement.x().dispn()
+    }, props.delay || 3000)
+}
+
 /**
  * get a value from localStorage
  * @param path {string} path 
@@ -119,6 +153,24 @@ class SmartDomElement_{
     }
 
     /**
+     * add classes
+     * @param classes {string} space separated list of classes
+     */
+    ac(classes){
+        for(let klass of classes.split(" ")) this.e.classList.add(klass)
+        return this
+    }
+
+    /**
+     * remove classes
+     * @param classes {string} space separated list of classes
+     */
+    rc(classes){
+        for(let klass of classes.split(" ")) this.e.classList.remove(klass)
+        return this
+    }
+
+    /**
      * set HTML element attribute
      * @param name {string} name 
      * @param value {any} value 
@@ -165,7 +217,20 @@ class SmartDomElement_{
     /**
      * delete content of element
      */
-    x()        {this.innerHTML="";return this}
+    x()        {this.e.innerHTML="";return this}
+    /**
+     * set display
+     * @param x {string} display
+     */
+    disp(x)    {return this.addStyle("display", x)}
+    /**
+     * display none     
+     */
+    dispn()    {return this.disp("none")}
+    /**
+     * display initial     
+     */
+    dispi()    {return this.disp("initial")}
     /**
      * set width
      * @param x {number} width in pixels
@@ -191,6 +256,19 @@ class SmartDomElement_{
      * @param x {string} background color
      */
     bc(x)       {return this.addStyle("backgroundColor", x)}
+    /**
+     * set position
+     * @param x {string} position
+     */
+    pos(x)       {return this.addStyle("position", x)}
+    /**
+     * position relative
+     */
+    por()        {return this.pos("relative")}
+    /**
+     * position absolute
+     */
+    poa()        {return this.pos("absolute")}
     /**
      * set inner html
      * @param x {string} HTML string
@@ -303,6 +381,33 @@ class div_ extends SmartDomElement_{
  * div().html("I'm a div.")
  */
 function div(props){return new div_(props)}
+
+/**
+ * wrapper class for HTML button element
+ */
+class Button_ extends SmartDomElement_{
+    /**
+     * @param caption {string} caption 
+     * @param callback {function} callback
+     * @param props {object} props <opt-param />
+     */
+    constructor(caption, callback, props){
+        super({...props, ...{
+            tag: "button"
+        }})
+
+        this.html(caption)
+
+        if(callback) this.ae("click", callback)
+    }
+}
+/**
+ * returns a new Button_ instance
+ * @param caption {string} caption 
+ * @param callback {function} callback
+ * @param props {object} props <opt-param />
+ */
+function Button(caption, callback, props){return new Button_(caption, callback, props)}
 
 /**
  * wrapper for HTML input element
@@ -521,7 +626,7 @@ class Combo_ extends select_{
     /**
      * <props-opt></props-opt>
      * <table class="classtable">     
-     * <tr><td>forceOptions</td><td>list of options, allowrd option formats {value: "foo", display: "bar"} / ["foor", "bar"] / "foo" ( display will also be "foo")</td>     
+     * <tr><td>forceOptions</td><td>list of options, allowed option formats {value: "foo", display: "bar"} / ["foo", "bar"] / "foo" ( display will also be "foo")</td>     
      * <tr><td>forceSelected</td><td>selected option value</td>     
      * <tr><td>changeCallback</td><td>change callback</td>     
      * </table>
@@ -640,5 +745,7 @@ module.exports = {
     OptionsTable: OptionsTable,
     select: select,
     option: option,
-    Combo: Combo
+    Combo: Combo,
+    Button: Button,
+    alert: alert,
 }

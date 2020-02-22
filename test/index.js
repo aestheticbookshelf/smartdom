@@ -1,14 +1,12 @@
-const { Combo, select, option, OptionsTable, table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
+const { div, alert, Button, Combo, select, option, OptionsTable, table, thead, tbody, tr, td, CheckBoxInput } = require('../src/smartdom')
 
 console.log("starting app")
 
-let app = Combo({
-    id: "combo",
-    forceOptions: [
-        {value: "local", display: "Local"},
-        {value: "usebook", display: "Use Book"}
-    ]
-})
+let app = div().w(200).h(200).bc("#0f0").a(
+    Button("Press Me", () => alert({msg: "I was pressed.", kind: "info"})),
+    Button("Success", () => alert({msg: "Success.", kind: "success"})),
+    Button("Error", () => alert({msg: "Error.", kind: "error", delay: 500}))
+)
 
 app.mount()
 

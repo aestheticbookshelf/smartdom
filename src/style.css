@@ -1,3 +1,23 @@
 body {
     background-color: #ddd;
 }
+
+.alertelement {
+    padding: 10px;
+    background-color: #eee;
+    border: solid 1px;
+    top: 50px;
+    left: 50px;
+}
+
+.alertelement.info {
+    background-color: #aaf;
+}
+
+.alertelement.success {
+    background-color: #afa;
+}
+
+.alertelement.error {
+    background-color: #faa;
+}
