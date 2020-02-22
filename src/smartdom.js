@@ -1,6 +1,3 @@
-/**
- * Global functions
- */
 
 let alertElement = null
 let alertTimeout = null
